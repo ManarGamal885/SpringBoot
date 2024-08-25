@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Create authors table -->
+    <changeSet id="1" author="MANAR">
+        <createTable tableName="authors">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birthDate" type="date"/>
+            <column name="nationality" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Create books table -->
+    <changeSet id="2" author="MANAR">
+        <createTable tableName="books">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="isbn" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="published_date" type="date"/>
+            <column name="author_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add foreign key constraint to books table -->
+    <changeSet id="3" author="MANAR">
+        <addForeignKeyConstraint baseTableName="books" baseColumnNames="author_id"
+                                 constraintName="fk_books_author"
+                                 referencedTableName="authors" referencedColumnNames="id"/>
+    </changeSet>
+
+    <!-- Create borrowers table -->
+    <changeSet id="4" author="MANAR">
+        <createTable tableName="borrowers">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="membership_date" type="date"/>
+        </createTable>
+    </changeSet>
+
+    <!-- Create borrow_records table -->
+    <changeSet id="5" author="MANAR">
+        <createTable tableName="borrow_records">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="borrow_date" type="date"/>
+            <column name="return_date" type="date"/>
+            <column name="borrower_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <!-- Add foreign key constraints to borrow_records table -->
+    <changeSet id="6" author="MANAR">
+        <addForeignKeyConstraint baseTableName="borrow_records" baseColumnNames="borrower_id"
+                                 constraintName="fk_borrow_records_borrower"
+                                 referencedTableName="borrowers" referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="borrow_records" baseColumnNames="book_id"
+                                 constraintName="fk_borrow_records_book"
+                                 referencedTableName="books" referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
